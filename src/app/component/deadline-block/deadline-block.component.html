@@ -1,0 +1,51 @@
+<div class="deadline-page-container">
+
+  <mat-toolbar style="display: flex; justify-content: space-between;">
+    <span>STODO APP</span>
+    <div>
+      <button routerLink="/main" mat-raised-button class="toolbar_button" color="warn" style="margin-right: 10px;">
+        Задачи
+      </button>
+      <button mat-raised-button class="toolbar_button" color="primary" (click)="logOut()">Выйти</button>
+    </div>
+  </mat-toolbar>
+
+  <div style="overflow-y: auto; height: 350px">
+    <table class="table table-dark" style="overflow-y: auto; height: 350px">
+      <thead class="thead-dark">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Title</th>
+        <th scope="col">Deadline date</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let task of currentTasks; let i = index">
+        <th scope="row">{{i+1}}</th>
+        <td>{{task.title}}</td>
+        <td>{{task.deadlineDate | date}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="overflow-y: auto; height: 350px; margin-top: 50px">
+    <table class="table table-dark">
+      <thead class="thead-light">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Title</th>
+        <th scope="col">Deadline date</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let task of overDueTasks; let i = index">
+        <th scope="row">{{i}}</th>
+        <td>{{task.title}}</td>
+        <td>{{task.deadlineDate | date}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

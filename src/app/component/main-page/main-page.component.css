@@ -1,0 +1,29 @@
+.main-page-container {
+  max-width: 1306px;
+  margin: auto;
+}
+
+@media (max-width: 1024px){
+  .main-page-container {
+    max-width: 960px;
+  }
+}
+
+@media (max-width: 972px){
+  .main-page-container {
+    max-width: 900px;
+  }
+}
+
+@media (max-width: 768px){
+  .main-page-container {
+    max-width: 700px;
+  }
+}
+
+@media (max-width: 376px){
+  .toolbar_button {
+    width: 75px;
+    font-size: 12px;
+  }
+}

@@ -1,0 +1,46 @@
+.main-page-block {
+}
+
+.semester-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.semester-block-list {
+  display: flex;
+  width: 95%;
+  align-items: center;
+  justify-content: center;
+}
+
+.semester-block-subject-list {
+  display: flex;
+  flex-flow: wrap;
+  justify-content: space-between;
+  width: 95%;
+  overflow-y: auto;
+  height: 100%;
+}
+
+app-todo-card {
+  width: 30%;
+  height: 400px;
+  margin-top: 15px;
+  overflow-y: auto
+}
+
+@media (max-width: 768px){
+  app-todo-card {
+    width: 45%;
+    height: 300px;
+    overflow-y: auto
+  }
+}
+
+@media (max-width: 576px){
+  app-todo-card {
+    width: 100%;
+    height: 300px;
+  }
+}

@@ -1,0 +1,37 @@
+<div class="security-page">
+  <h2>Вход</h2>
+
+  <form>
+    <mat-form-field style="width: 100%" appearance="fill">
+      <mat-label>Введите email</mat-label>
+      <input matInput placeholder="pat@example.com" [formControl]="email" required>
+      <mat-error *ngIf="email.hasError('email') && !email.hasError('required')">
+        Невалидный email
+      </mat-error>
+      <mat-error *ngIf="email.hasError('required')">
+        Email должен быть представлен
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field style="width: 100%" appearance="fill">
+      <mat-label>Введите пароль</mat-label>
+      <input matInput [type]="hide ? 'password' : 'text'" placeholder="Пароль" [formControl]="password" required>
+      <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+      <mat-error *ngIf="password.hasError('minlength') && !password.hasError('required')">
+        Пароль должен содержать минимум 6 символов
+      </mat-error>
+      <mat-error *ngIf="password.hasError('required')">
+        Пароль должен быть представлен
+      </mat-error>
+    </mat-form-field>
+    <button mat-raised-button color="primary" style="width: 70%"
+            [disabled]="email.invalid || password.invalid" (click)="submit()"
+            type="submit">Войти</button>
+    <a routerLink="/register">Зарегистрироваться</a>
+    <a routerLink="/forgot" class="ml-3px">Забыли пароль</a>
+  </form>
+
+</div>
+

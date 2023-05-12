@@ -1,0 +1,53 @@
+<div class="security-page">
+
+  <h2>Регистрация</h2>
+
+  <form>
+    <mat-form-field style="width: 100%" appearance="fill">
+      <mat-label>Введите email</mat-label>
+      <input matInput placeholder="pat@example.com" [formControl]="email" required>
+      <mat-error *ngIf="email.hasError('email') && !email.hasError('required')">
+        Невалидный email
+      </mat-error>
+      <mat-error *ngIf="email.hasError('required')">
+        Email должен быть представлен
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field style="width: 100%" appearance="fill">
+      <mat-label>Введите пароль</mat-label>
+      <input matInput [type]="hidePassword ? 'password' : 'text'" placeholder="Пароль" [formControl]="password" required>
+      <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword"
+              [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+        <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+      <mat-error *ngIf="password.hasError('minlength') && !password.hasError('required')">
+        Пароль должен содержать минимум 6 символов
+      </mat-error>
+      <mat-error *ngIf="password.hasError('required')">
+        Пароль должен быть представлен
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field style="width: 100%" appearance="fill">
+      <mat-label>Подтвердите пароль</mat-label>
+      <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" placeholder="Пароль" [formControl]="confirmPassword" required>
+      <button mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword"
+              [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideConfirmPassword">
+        <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+      <mat-error *ngIf="confirmPassword.hasError('minlength') && !confirmPassword.hasError('required')">
+        Пароль должен содержать минимум 6 символов
+      </mat-error>
+      <mat-error *ngIf="confirmPassword.hasError('required')">
+        Пароль должен быть представлен
+      </mat-error>
+    </mat-form-field>
+    <button mat-raised-button color="primary" style="width: 70%"
+            [disabled]="email.invalid || password.invalid || confirmPassword.invalid" (click)="submit()"
+            type="submit">Зарегистрироваться</button>
+    <a routerLink="/login">Войти</a>
+    <a routerLink="/forgot">Забыли пароль</a>
+  </form>
+
+</div>

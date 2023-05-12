@@ -1,0 +1,18 @@
+<div class="main-page-container">
+
+  <mat-toolbar style="display: flex; justify-content: space-between;">
+    <span>STODO APP</span>
+    <div>
+      <button routerLink="/deadline" mat-raised-button class="toolbar_button" color="warn" style="margin-right: 10px;">
+        Дедлайны
+      </button>
+      <button mat-raised-button class="toolbar_button" color="primary" (click)="logOut()">Выйти</button>
+    </div>
+  </mat-toolbar>
+
+  <div class="" style="margin-top: 15px">
+<!--    <app-deadline-block class="col-4"></app-deadline-block>-->
+    <app-main-block></app-main-block>
+  </div>
+
+</div>
