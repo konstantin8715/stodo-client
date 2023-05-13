@@ -27,11 +27,18 @@
       </mat-form-field>
 
       <div *ngIf="semesters.length > 0 && currentSemester.subjects" class="semester-block-subject-list">
+
         <app-todo-card *ngFor="let subject of currentSemester.subjects; let i = index"
                        [semester]="getCurrentSemester()" [subject]="subject" [index]="i">
         </app-todo-card>
-<!--        <button *ngIf="currentSemester" type="button" class="col-4 mt-4 btn btn-primary"-->
-<!--                (click)="createSubject(currentSemester.id)">add subject</button>-->
+
+        <div class="add-semester-button-area">
+          <button (click)="createSubject(currentSemester.id)"
+                  mat-fab color="warn" aria-label="Example icon button with a home icon">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+
       </div>
     </div>
 

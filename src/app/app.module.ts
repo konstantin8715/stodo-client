@@ -28,6 +28,8 @@ import {MatChipsModule} from "@angular/material/chips";
 import { WelcomeComponent } from './component/welcome/welcome.component';
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatBadgeModule} from "@angular/material/badge";
+import {MatCheckboxModule} from "@angular/material/checkbox";
+import {MatExpansionModule} from "@angular/material/expansion";
 
 @NgModule({
   declarations: [
@@ -43,24 +45,26 @@ import {MatBadgeModule} from "@angular/material/badge";
     MainPageComponent,
     WelcomeComponent
   ],
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        AppRoutingModule,
-        FormsModule,
-        HttpClientModule,
-        ReactiveFormsModule,
-        MaterialModule,
-        MatInputModule,
-        MatButtonModule,
-        MatDatepickerModule,
-        MatListModule,
-        MatIconModule,
-        MatCardModule,
-        MatChipsModule,
-        MatToolbarModule,
-        MatBadgeModule
-    ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    MaterialModule,
+    MatInputModule,
+    MatButtonModule,
+    MatDatepickerModule,
+    MatListModule,
+    MatIconModule,
+    MatCardModule,
+    MatChipsModule,
+    MatToolbarModule,
+    MatBadgeModule,
+    MatCheckboxModule,
+    MatExpansionModule
+  ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
     useClass: ErrorInterceptorService,

@@ -65,10 +65,10 @@ export class MainBlockComponent implements OnInit {
   }
 
   createSubject(semesterId: number) {
-    this.subjectService.createSubject(semesterId, "subject")
+    this.subjectService.createSubject(semesterId, "Кликните два раза, чтобы редактировать название")
       .subscribe(s => {
         this.currentSemester.subjects?.push(s);
-        this.getSubjectsToSemester(this.semesters);
+        // this.getSubjectsToSemester(this.semesters);
       });
   }
 

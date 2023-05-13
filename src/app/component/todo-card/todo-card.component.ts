@@ -20,8 +20,8 @@ export class TodoCardComponent implements OnInit{
   addTaskDeadline = new FormControl('', [Validators.required]);
   isTitleChange = false;
 
-  log() {
-    console.log(this.isTitleChange);
+  log(s: string) {
+    console.log(s);
   }
 
   getTasksToSubject(semester: Semester, subject: Subject) {
@@ -50,7 +50,7 @@ export class TodoCardComponent implements OnInit{
       this.notificationService.showSnackBar("Date shouldn't be empty");
       task.deadlineDate = '1983-04-04';
     }
-    this.isTitleChange = false;
+    task.isChange = false;
   }
 
   updateSubject(semesterId: number, subjectId: number, title: string) {
@@ -61,7 +61,7 @@ export class TodoCardComponent implements OnInit{
   doTask(semesterId: number, subjectId: number, taskId: number, task: Task) {
     this.taskService.doTask(semesterId, subjectId, taskId)
       .subscribe(() => {
-        task.done = !task.done;
+        // task.done = !task.done;
       });
   }
 
@@ -84,8 +84,8 @@ export class TodoCardComponent implements OnInit{
       this.taskService.createTask(semesterId, subjectId, this.addTaskTitle.value, this.convertDeadlineDate(this.addTaskDeadline.value))
         .subscribe(task => {
           this.subject.tasks?.push(task);
-          // this.addTaskTitle = task.title;
-          // this.addTaskDeadline = task.deadlineDate;
+          this.addTaskTitle.setValue('');
+          this.addTaskDeadline.setValue('');
         });
     }
     catch (e: any) {
@@ -100,4 +100,7 @@ export class TodoCardComponent implements OnInit{
     }
     return date.toISOString().split('T')[0];
   }
+
+  protected readonly focus = focus;
+  panelOpenState = false;
 }

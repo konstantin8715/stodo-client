@@ -2,64 +2,52 @@
 
   <div class="card-header subject-title">
 
-    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">+</button>
-
-    <!--modal-->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Создание задания</h5>
-          </div>
-          <div class="modal-body" style="display: flex; flex-direction: column">
-
-            <mat-form-field>
-              <mat-label>Введите название</mat-label>
-              <input matInput placeholder="Лабораторная работа 1" [formControl]="addTaskTitle" required>
-              <mat-error *ngIf="addTaskTitle.hasError('required')">
-                Название не может быть пустым
-              </mat-error>
-            </mat-form-field>
-
-            <mat-form-field>
-              <mat-label>Введите дату дедлайна</mat-label>
-              <input matInput placeholder="Лабораторная работа 1" [formControl]="addTaskDeadline" required>
-              <mat-error *ngIf="addTaskDeadline.hasError('required')">
-                Дата дедлана не может быть пустой
-              </mat-error>
-            </mat-form-field>
-
-<!--            <mat-form-field appearance="fill">-->
-<!--              <mat-label style="font-size: 14px;">Выберите дату дедлайна</mat-label>-->
-<!--              <input matInput [matDatepicker]="picker1" [(ngModel)]="addTaskDeadline">-->
-<!--              <mat-hint>MM/DD/YYYY</mat-hint>-->
-<!--&lt;!&ndash;              <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>&ndash;&gt;-->
-<!--              <mat-datepicker #picker1></mat-datepicker>-->
-<!--              <mat-error *ngIf="addTaskDeadline.hasError('required')">-->
-<!--                Дата дедлайна не может быть пустой-->
-<!--              </mat-error>-->
-<!--            </mat-form-field>-->
-
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="log()">Закрыть</button>
-            <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
-                    [disabled]="addTaskTitle.invalid || addTaskDeadline.invalid"
-                    (click)="createTask(semester.id, subject.id)">
-              Добавить задание
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <span *ngIf="!isTitleChange" (dblclick)="isTitleChange = true">{{subject.title}}</span>
+    <span *ngIf="!isTitleChange" (click)="isTitleChange = true">{{subject.title}}</span>
     <input class="change-input" *ngIf="isTitleChange" [(ngModel)]="subject.title"
            (focusout)="updateSubject(semester.id, subject.id, subject.title)"
            (touchstart)="updateSubject(semester.id, subject.id, subject.title)"/>
-    <button type="button" class="btn btn-danger">X</button>
+    <button type="button" class="btn btn-danger" (click)="deleteSubject(semester.id, subject.id, index)">X</button>
 
   </div>
+
+  <mat-accordion>
+    <mat-expansion-panel style="background-color: #6c757d" (opened)="panelOpenState = true"
+                         (closed)="panelOpenState = false">
+      <mat-expansion-panel-header style="background-color: #6c757d">
+        <mat-panel-title>
+          Добавить задание
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="add-task-block">
+        <mat-form-field style="width: 100%;">
+          <mat-label>Введите название</mat-label>
+          <input matInput placeholder="Лабораторная работа 1" [formControl]="addTaskTitle" required>
+          <mat-error *ngIf="addTaskTitle.hasError('required')">
+            Название не может быть пустым
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="width: 100%;">
+          <mat-label style="font-size: 14px;">Выберите дату дедлайна</mat-label>
+          <input matInput [matDatepicker]="picker1" [formControl]="addTaskDeadline">
+          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-datepicker #picker1></mat-datepicker>
+          <mat-error *ngIf="addTaskDeadline.hasError('required')">
+            Дата дедлайна не может быть пустой
+          </mat-error>
+        </mat-form-field>
+
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                [disabled]="addTaskTitle.invalid || addTaskDeadline.invalid"
+                (click)="createTask(semester.id, subject.id)">
+          Добавить задание
+        </button>
+      </div>
+
+    </mat-expansion-panel>
+  </mat-accordion>
 
   <div class="task-list" *ngFor="let task of subject.tasks; let i = index">
 
@@ -67,17 +55,17 @@
       <span>X</span>
     </div>
     <div class="task-list-item">
-      <span *ngIf="!task.done && !isTitleChange" (dblclick)="isTitleChange = true" class="task-list-item-title">{{task.title}}</span>
-      <span *ngIf="task.done && !isTitleChange" (dblclick)="isTitleChange = true"
+      <span *ngIf="!task.done && !task.isChange" (click)="task.isChange = true" class="task-list-item-title">{{task.title}}</span>
+      <span *ngIf="task.done && !task.isChange" (click)="task.isChange = true"
             style="text-decoration: line-through" class="task-list-item-title">{{task.title}}</span>
 
-      <input *ngIf="task.done && isTitleChange"
+      <input *ngIf="task.done && task.isChange"
              [value]="task.title" [(ngModel)]="task.title"
              (focusout)="updateTask(semester.id, subject.id, task)"
              (touchstart)="updateTask(semester.id, subject.id, task)"
              style="text-decoration: line-through"
              class="task-list-item-title"/>
-      <input *ngIf="!task.done && isTitleChange" [value]="task.title" [(ngModel)]="task.title"
+      <input *ngIf="!task.done && task.isChange" [value]="task.title" [(ngModel)]="task.title"
              (focusout)="updateTask(semester.id, subject.id, task)"
              (touchstart)="updateTask(semester.id, subject.id, task)"
              class="task-list-item-title"/>
@@ -87,96 +75,17 @@
         {{task.deadlineDate | date}}
       </span>
 
-      <button type="button" class="btn btn-warning task-list-item-todo-button"
-              (click)="doTask(semester.id, subject.id, task.id, task)">
-        <div style="display: block;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
-            <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
-          </svg>
-        </div>
-      </button>
+      <mat-checkbox [(ngModel)]="task.done" (click)="doTask(semester.id, subject.id, task.id, task)"></mat-checkbox>
+<!--      <button type="button" class="btn btn-warning task-list-item-todo-button"-->
+<!--              (click)="doTask(semester.id, subject.id, task.id, task)">-->
+<!--        <div style="display: block;">-->
+<!--          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">-->
+<!--            <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />-->
+<!--          </svg>-->
+<!--        </div>-->
+<!--      </button>-->
     </div>
 
   </div>
 
 </div>
-
-
-<!--<mat-card matBadge="Х" matBadgeSize="large" class="demo-section"-->
-<!--          style="height: 350px; overflow-y: auto; margin-top: 10px;">-->
-
-<!--  <mat-list style="width: 100%; display: flex; flex-direction: column">-->
-
-<!--    <div class="subject-control">-->
-
-<!--      <mat-form-field class="example-form-field subject-control-title-field" appearance="outline">-->
-
-<!--        <input matInput type="text"-->
-<!--               [(ngModel)]="subject.title"-->
-<!--               (ngModelChange)="updateSubject(semester.id, subject.id, subject.title)">-->
-
-<!--      </mat-form-field>-->
-
-<!--    </div>-->
-
-<!--    <mat-divider></mat-divider>-->
-
-<!--    <div style="display: flex; flex-direction: column; align-items: center">-->
-<!--      <mat-form-field style="width: 100%; height: 100%;" class="example-form-field" appearance="outline">-->
-<!--        &lt;!&ndash;        <mat-label>Введите название задания</mat-label>&ndash;&gt;-->
-<!--        <input style="font-size: 14px;" matInput type="text" [(ngModel)]="addTaskTitle" placeholder="Введите название задания">-->
-<!--      </mat-form-field>-->
-
-
-<!--      <mat-form-field appearance="fill">-->
-<!--        <mat-label>Choose a date</mat-label>-->
-<!--        <input matInput [matDatepicker]="picker" [(ngModel)]="addTaskDeadline">-->
-<!--        <mat-hint>MM/DD/YYYY</mat-hint>-->
-<!--        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>-->
-<!--        <mat-datepicker #picker></mat-datepicker>-->
-<!--      </mat-form-field>-->
-
-<!--      <button mat-icon-button matTooltip="Primary" color="primary" aria-label="Example icon-button with a heart icon"-->
-<!--              (click)="createTask(semester.id, subject.id, addTaskTitle, addTaskDeadline)">-->
-<!--        <mat-icon>add</mat-icon>-->
-<!--      </button>-->
-<!--    </div>-->
-
-<!--    <mat-divider></mat-divider>-->
-<!--    <div mat-subheader>Нужно сделать</div>-->
-
-<!--    <mat-list-item *ngFor="let task of subject.tasks; let i = index">-->
-
-<!--      <mat-form-field style="height: 70px" class="example-form-field">-->
-
-<!--        <input *ngIf="task.done" class="text-decoration-line-through" matInput type="text" [value]="task.title" [(ngModel)]="task.title"-->
-<!--               (ngModelChange)="updateTask(semester.id, subject.id, task)">-->
-<!--        <input *ngIf="!task.done" matInput type="text" [value]="task.title" [(ngModel)]="task.title"-->
-<!--               (ngModelChange)="updateTask(semester.id, subject.id, task)">-->
-
-<!--        <button matSuffix mat-icon-button aria-label="Clear" (click)="doTask(semester.id, subject.id, task.id, task)">-->
-<!--          <mat-icon>done</mat-icon>-->
-<!--        </button>-->
-
-<!--        <button matSuffix mat-icon-button aria-label="Clear" (click)="deleteTask(semester.id, subject.id, task.id, i)">-->
-<!--          <mat-icon>close</mat-icon>-->
-<!--        </button>-->
-
-<!--      </mat-form-field>-->
-
-<!--    </mat-list-item>-->
-<!--&lt;!&ndash;    <mat-divider></mat-divider>&ndash;&gt;-->
-<!--&lt;!&ndash;    <div mat-subheader>Сделано</div>&ndash;&gt;-->
-<!--&lt;!&ndash;    <mat-list-item *ngFor="let task of tasks">&ndash;&gt;-->
-
-<!--&lt;!&ndash;      <mat-form-field class="example-form-field">&ndash;&gt;-->
-<!--&lt;!&ndash;        <input matInput type="text" [(ngModel)]="task.title">&ndash;&gt;-->
-<!--&lt;!&ndash;        <button matSuffix mat-icon-button aria-label="Clear" (click)="deleteTask()">&ndash;&gt;-->
-<!--&lt;!&ndash;          <mat-icon>close</mat-icon>&ndash;&gt;-->
-<!--&lt;!&ndash;        </button>&ndash;&gt;-->
-<!--&lt;!&ndash;      </mat-form-field>&ndash;&gt;-->
-
-<!--&lt;!&ndash;    </mat-list-item>&ndash;&gt;-->
-<!--  </mat-list>-->
-
-<!--</mat-card>-->

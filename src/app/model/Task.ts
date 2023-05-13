@@ -3,4 +3,5 @@ export interface Task {
   title : string;
   deadlineDate: string;
   done: boolean;
+  isChange: boolean;
 }

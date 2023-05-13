@@ -80,9 +80,26 @@
 input {
   border: none;
   outline: none;
+  border-bottom: 2px solid black;
   text-align: center;
 }
 
 mat-calendar {
   z-index: 50000;
 }
+
+::ng-deep .cdk-overlay-container{
+  z-index: 1200 !important;
+}
+
+.add-task-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /*font-size: 10px;*/
+}
+
+/*mat-form-field {*/
+/*  width: 100%;*/
+/*  height: 50px;*/
+/*}*/

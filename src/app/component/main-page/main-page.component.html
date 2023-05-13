@@ -1,12 +1,16 @@
 <div class="main-page-container">
 
-  <mat-toolbar style="display: flex; justify-content: space-between;">
-    <span>STODO APP</span>
-    <div>
-      <button routerLink="/deadline" mat-raised-button class="toolbar_button" color="warn" style="margin-right: 10px;">
-        Дедлайны
-      </button>
-      <button mat-raised-button class="toolbar_button" color="primary" (click)="logOut()">Выйти</button>
+  <mat-toolbar style="display: flex; justify-content: center;">
+    <div style="display: flex; width: 97.5%; justify-content: space-between">
+
+      <span>STODO APP</span>
+      <div>
+        <button routerLink="/deadline" mat-raised-button class="toolbar_button" color="warn" style="margin-right: 10px;">
+          Дедлайны
+        </button>
+        <button mat-raised-button class="toolbar_button" color="primary" (click)="logOut()">Выйти</button>
+      </div>
+
     </div>
   </mat-toolbar>
 
