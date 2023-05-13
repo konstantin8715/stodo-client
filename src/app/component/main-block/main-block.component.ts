@@ -39,8 +39,6 @@ export class MainBlockComponent implements OnInit {
 
   updateSemester(semester: Semester, event: MatChipEditedEvent) {
     const value = event.value.trim();
-    // console.log('update semester');
-    console.log(value);
     this.semesterService.updateSemester(semester.id, value).subscribe(() =>{
       semester.title = value;
     });
@@ -57,11 +55,13 @@ export class MainBlockComponent implements OnInit {
   createSemester(event: MatChipInputEvent) {
     const value = event.value.trim();
 
-    this.semesterService.createSemester(value)
-      .subscribe(s => {
-        this.semesters.push(s);
-        this.currentSemester = this.semesters[this.semesters.length - 1];
-      });
+    if (value) {
+      this.semesterService.createSemester(value)
+        .subscribe(s => {
+          this.semesters.push(s);
+          this.currentSemester = this.semesters[this.semesters.length - 1];
+        });
+    }
   }
 
   createSubject(semesterId: number) {
@@ -72,5 +72,21 @@ export class MainBlockComponent implements OnInit {
       });
   }
 
-  protected readonly console = console;
+  saveCurrentSemester(semester: Semester) {
+    this.currentSemester = semester;
+    this.tokenStorageService.saveCurrentSemester(semester.id);
+  }
+
+  getCurrentSemester() {
+    let id: number;
+    if (this.tokenStorageService.getCurrentSemester() != null) {
+      id = Number(this.tokenStorageService.getCurrentSemester());
+      this.semesters.forEach(s => {
+        if (s.id == id) this.currentSemester = s;
+      })
+    }
+    return this.currentSemester;
+  }
+
+  // protected readonly console = console;
 }

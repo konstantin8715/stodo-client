@@ -77,4 +77,12 @@
   font-size: 10px;
 }
 
+input {
+  border: none;
+  outline: none;
+  text-align: center;
+}
 
+mat-calendar {
+  z-index: 50000;
+}

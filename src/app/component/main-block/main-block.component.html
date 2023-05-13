@@ -13,7 +13,7 @@
                         [editable]="true"
                         (edited)="updateSemester(semester, $event);"
                         [aria-description]="'press enter to edit ' + semester.title"
-                        (click)="currentSemester = semester">
+                        (click)="saveCurrentSemester(semester)">
             {{semester.title}}
             <button matChipRemove [attr.aria-label]="'remove ' + semester.title">
               <mat-icon>cancel</mat-icon>
@@ -26,9 +26,9 @@
         </mat-chip-grid>
       </mat-form-field>
 
-      <div *ngIf="semesters.length > 0" class="semester-block-subject-list">
+      <div *ngIf="semesters.length > 0 && currentSemester.subjects" class="semester-block-subject-list">
         <app-todo-card *ngFor="let subject of currentSemester.subjects; let i = index"
-                       [semester]="currentSemester" [subject]="subject" [index]="i">
+                       [semester]="getCurrentSemester()" [subject]="subject" [index]="i">
         </app-todo-card>
 <!--        <button *ngIf="currentSemester" type="button" class="col-4 mt-4 btn btn-primary"-->
 <!--                (click)="createSubject(currentSemester.id)">add subject</button>-->

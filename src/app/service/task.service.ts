@@ -35,7 +35,7 @@ export class TaskService {
     return this.http.delete(this.url + semesterId + '/' + subjectId + '/' + taskId, /*{headers: headers}*/);
   }
 
-  createTask(semesterId: number, subjectId: number, title: string, deadlineDate: string): Observable<Task> {
+  createTask(semesterId: number, subjectId: number, title: string | null, deadlineDate: string): Observable<Task> {
     const body = {title: title, deadlineDate: deadlineDate};
     return this.http.post<Task>(this.url + semesterId + '/' + subjectId, body, /*{headers: headers}*/);
   }

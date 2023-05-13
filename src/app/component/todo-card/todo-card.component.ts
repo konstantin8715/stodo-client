@@ -5,6 +5,7 @@ import {Task} from "../../model/Task";
 import {SubjectService} from "../../service/subject.service";
 import {Semester} from "../../model/Semester";
 import {NotificationService} from "../../service/notification.service";
+import {FormControl, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-todo-card',
@@ -15,8 +16,13 @@ export class TodoCardComponent implements OnInit{
   @Input() subject: Subject;
   @Input() semester: Semester;
   @Input() index: number;
-  addTaskTitle: string = '';
-  addTaskDeadline: string = '';
+  addTaskTitle = new FormControl('', [Validators.required]);
+  addTaskDeadline = new FormControl('', [Validators.required]);
+  isTitleChange = false;
+
+  log() {
+    console.log(this.isTitleChange);
+  }
 
   getTasksToSubject(semester: Semester, subject: Subject) {
     this.taskService.getTasksForSemesterAndSubject(semester.id, subject.id)
@@ -44,10 +50,12 @@ export class TodoCardComponent implements OnInit{
       this.notificationService.showSnackBar("Date shouldn't be empty");
       task.deadlineDate = '1983-04-04';
     }
+    this.isTitleChange = false;
   }
 
   updateSubject(semesterId: number, subjectId: number, title: string) {
     this.subjectService.updateSubject(semesterId, subjectId, title).subscribe();
+    this.isTitleChange = false;
   }
 
   doTask(semesterId: number, subjectId: number, taskId: number, task: Task) {
@@ -71,13 +79,13 @@ export class TodoCardComponent implements OnInit{
       });
   }
 
-  createTask(semesterId: number, subjectId: number, title: string, deadlineDate: string) {
+  createTask(semesterId: number, subjectId: number) {
     try {
-      this.taskService.createTask(semesterId, subjectId, title, this.convertDeadlineDate(deadlineDate))
+      this.taskService.createTask(semesterId, subjectId, this.addTaskTitle.value, this.convertDeadlineDate(this.addTaskDeadline.value))
         .subscribe(task => {
           this.subject.tasks?.push(task);
-          this.addTaskTitle = task.title;
-          this.addTaskDeadline = task.deadlineDate;
+          // this.addTaskTitle = task.title;
+          // this.addTaskDeadline = task.deadlineDate;
         });
     }
     catch (e: any) {
@@ -85,8 +93,11 @@ export class TodoCardComponent implements OnInit{
     }
   }
 
-  convertDeadlineDate(deadlineDate: string) {
-    const date = new Date(deadlineDate);
+  convertDeadlineDate(deadlineDate: string | null) {
+    let date = new Date();
+    if (deadlineDate != null) {
+      date = new Date(deadlineDate);
+    }
     return date.toISOString().split('T')[0];
   }
 }

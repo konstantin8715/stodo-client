@@ -1,125 +1,94 @@
 <div class="card subject-card">
 
   <div class="card-header subject-title">
-    <button type="button" class="btn btn-success">+</button>
-    <span>Математика</span>
+
+    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">+</button>
+
+    <!--modal-->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Создание задания</h5>
+          </div>
+          <div class="modal-body" style="display: flex; flex-direction: column">
+
+            <mat-form-field>
+              <mat-label>Введите название</mat-label>
+              <input matInput placeholder="Лабораторная работа 1" [formControl]="addTaskTitle" required>
+              <mat-error *ngIf="addTaskTitle.hasError('required')">
+                Название не может быть пустым
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>Введите дату дедлайна</mat-label>
+              <input matInput placeholder="Лабораторная работа 1" [formControl]="addTaskDeadline" required>
+              <mat-error *ngIf="addTaskDeadline.hasError('required')">
+                Дата дедлана не может быть пустой
+              </mat-error>
+            </mat-form-field>
+
+<!--            <mat-form-field appearance="fill">-->
+<!--              <mat-label style="font-size: 14px;">Выберите дату дедлайна</mat-label>-->
+<!--              <input matInput [matDatepicker]="picker1" [(ngModel)]="addTaskDeadline">-->
+<!--              <mat-hint>MM/DD/YYYY</mat-hint>-->
+<!--&lt;!&ndash;              <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>&ndash;&gt;-->
+<!--              <mat-datepicker #picker1></mat-datepicker>-->
+<!--              <mat-error *ngIf="addTaskDeadline.hasError('required')">-->
+<!--                Дата дедлайна не может быть пустой-->
+<!--              </mat-error>-->
+<!--            </mat-form-field>-->
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="log()">Закрыть</button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                    [disabled]="addTaskTitle.invalid || addTaskDeadline.invalid"
+                    (click)="createTask(semester.id, subject.id)">
+              Добавить задание
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <span *ngIf="!isTitleChange" (dblclick)="isTitleChange = true">{{subject.title}}</span>
+    <input class="change-input" *ngIf="isTitleChange" [(ngModel)]="subject.title"
+           (focusout)="updateSubject(semester.id, subject.id, subject.title)"
+           (touchstart)="updateSubject(semester.id, subject.id, subject.title)"/>
     <button type="button" class="btn btn-danger">X</button>
+
   </div>
 
-  <div class="task-list">
+  <div class="task-list" *ngFor="let task of subject.tasks; let i = index">
 
-    <div class="delete-task-button">
+    <div class="delete-task-button" (click)="deleteTask(semester.id, subject.id, task.id, i)">
       <span>X</span>
     </div>
     <div class="task-list-item">
-      <span class="task-list-item-title">Лабораторная работа 1</span>
-      <span class="task-list-item-deadline">15 Dec, 2023</span>
-      <button type="button" class="btn btn-warning task-list-item-todo-button">
-        <div style="display: block;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
-            <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
-          </svg>
-        </div>
-      </button>
-    </div>
+      <span *ngIf="!task.done && !isTitleChange" (dblclick)="isTitleChange = true" class="task-list-item-title">{{task.title}}</span>
+      <span *ngIf="task.done && !isTitleChange" (dblclick)="isTitleChange = true"
+            style="text-decoration: line-through" class="task-list-item-title">{{task.title}}</span>
 
-    <div class="delete-task-button">
-      <span>X</span>
-    </div>
-    <div class="task-list-item">
-      <span class="task-list-item-title">Лабораторная работа 1fdfddddddddddddddddddddddddddddddddddddddddddddddddd</span>
-      <span class="task-list-item-deadline">15 Dec, 2023</span>
-      <button type="button" class="btn btn-warning task-list-item-todo-button">
-        <div style="display: block;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
-            <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
-          </svg>
-        </div>
-      </button>
-    </div>
+      <input *ngIf="task.done && isTitleChange"
+             [value]="task.title" [(ngModel)]="task.title"
+             (focusout)="updateTask(semester.id, subject.id, task)"
+             (touchstart)="updateTask(semester.id, subject.id, task)"
+             style="text-decoration: line-through"
+             class="task-list-item-title"/>
+      <input *ngIf="!task.done && isTitleChange" [value]="task.title" [(ngModel)]="task.title"
+             (focusout)="updateTask(semester.id, subject.id, task)"
+             (touchstart)="updateTask(semester.id, subject.id, task)"
+             class="task-list-item-title"/>
 
-    <div class="delete-task-button">
-      <span>X</span>
-    </div>
-    <div class="task-list-item">
-      <span class="task-list-item-title">Лабораторная работа 1</span>
-      <span class="task-list-item-deadline">15 Dec, 2023</span>
-      <button type="button" class="btn btn-warning task-list-item-todo-button">
-        <div style="display: block;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
-            <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
-          </svg>
-        </div>
-      </button>
-    </div>
+      <span *ngIf="!task.done" class="task-list-item-deadline">{{task.deadlineDate | date}}</span>
+      <span *ngIf="task.done" style="text-decoration: line-through" class="task-list-item-deadline">
+        {{task.deadlineDate | date}}
+      </span>
 
-    <div class="delete-task-button">
-      <span>X</span>
-    </div>
-    <div class="task-list-item">
-      <span class="task-list-item-title">Лабораторная работа 1</span>
-      <span class="task-list-item-deadline">15 Dec, 2023</span>
-      <button type="button" class="btn btn-warning task-list-item-todo-button">
-        <div style="display: block;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
-            <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
-          </svg>
-        </div>
-      </button>
-    </div>
-
-    <div class="delete-task-button">
-      <span>X</span>
-    </div>
-    <div class="task-list-item">
-      <span class="task-list-item-title">Лабораторная работа 1</span>
-      <span class="task-list-item-deadline">15 Dec, 2023</span>
-      <button type="button" class="btn btn-warning task-list-item-todo-button">
-        <div style="display: block;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
-            <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
-          </svg>
-        </div>
-      </button>
-    </div>
-
-    <div class="delete-task-button">
-      <span>X</span>
-    </div>
-    <div class="task-list-item">
-      <span class="task-list-item-title">Лабораторная работа 1</span>
-      <span class="task-list-item-deadline">15 Dec, 2023</span>
-      <button type="button" class="btn btn-warning task-list-item-todo-button">
-        <div style="display: block;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
-            <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
-          </svg>
-        </div>
-      </button>
-    </div>
-
-    <div class="delete-task-button">
-      <span>X</span>
-    </div>
-    <div class="task-list-item">
-      <span class="task-list-item-title">Лабораторная работа 1</span>
-      <span class="task-list-item-deadline">15 Dec, 2023</span>
-      <button type="button" class="btn btn-warning task-list-item-todo-button">
-        <div style="display: block;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
-            <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
-          </svg>
-        </div>
-      </button>
-    </div>
-
-    <div class="delete-task-button">
-      <span>X</span>
-    </div>
-    <div class="task-list-item">
-      <span class="task-list-item-title">Лабораторная работа 1</span>
-      <span class="task-list-item-deadline">15 Dec, 2023</span>
-      <button type="button" class="btn btn-warning task-list-item-todo-button">
+      <button type="button" class="btn btn-warning task-list-item-todo-button"
+              (click)="doTask(semester.id, subject.id, task.id, task)">
         <div style="display: block;">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
             <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
