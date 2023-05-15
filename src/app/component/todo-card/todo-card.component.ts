@@ -6,6 +6,7 @@ import {SubjectService} from "../../service/subject.service";
 import {Semester} from "../../model/Semester";
 import {NotificationService} from "../../service/notification.service";
 import {FormControl, Validators} from "@angular/forms";
+import {TimeService} from "../../service/time.service";
 
 @Component({
   selector: 'app-todo-card',
@@ -16,40 +17,59 @@ export class TodoCardComponent implements OnInit{
   @Input() subject: Subject;
   @Input() semester: Semester;
   @Input() index: number;
+  tasks: Task[] = [];
+  doneTasks: Task[] = [];
   addTaskTitle = new FormControl('', [Validators.required]);
   addTaskDeadline = new FormControl('', [Validators.required]);
   isTitleChange = false;
+
 
   log(s: string) {
     console.log(s);
   }
 
-  getTasksToSubject(semester: Semester, subject: Subject) {
-    this.taskService.getTasksForSemesterAndSubject(semester.id, subject.id)
-      .subscribe(data => subject.tasks = data);
-  }
+  // getTasksToSubject(semester: Semester, subject: Subject) {
+  //   this.taskService.getTasksForSemesterAndSubject(semester.id, subject.id)
+  //     .subscribe(data => subject.tasks = data);
+  // }
 
   ngOnInit(): void {
     this.taskService.getTasksForSemesterAndSubject(this.semester.id, this.subject.id)
       .subscribe(tasks => {
-        this.subject.tasks = tasks;
+        this.tasks = tasks
+          .filter(task => {
+            task.deadlineDate = this.timeService.convertDeadlineToLocal(task);
+            return !task.done;
+          })
+          .sort((task1, task2) => {
+            if (new Date(task1.deadlineDate) < new Date(task2.deadlineDate)) return -1;
+            return 1;
+          });
+      });
+
+    this.taskService.getTasksForSemesterAndSubject(this.semester.id, this.subject.id)
+      .subscribe(tasks => {
+        this.doneTasks = tasks
+          .filter(task => {
+            task.deadlineDate = this.timeService.convertDeadlineToLocal(task);
+            return task.done;
+          })
+          .sort((task1, task2) => {
+            if (new Date(task1.deadlineDate) < new Date(task2.deadlineDate)) return -1;
+            return 1;
+          });
       });
   }
 
   constructor(private taskService : TaskService,
               private subjectService: SubjectService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private timeService: TimeService) {
   }
 
   updateTask(semesterId: number, subjectId: number, task: Task) {
-    if (task.deadlineDate != null) {
-      this.taskService.updateTask(semesterId, subjectId, task.id,
-          task.title, this.convertDeadlineDate(task.deadlineDate)).subscribe();
-    }
-    else {
-      this.notificationService.showSnackBar("Date shouldn't be empty");
-      task.deadlineDate = '1983-04-04';
-    }
+    this.taskService.updateTask(semesterId, subjectId, task.id,
+          task.title, this.timeService.convertDeadlineDateToISO(task.deadlineDate)).subscribe();
     task.isChange = false;
   }
 
@@ -58,17 +78,29 @@ export class TodoCardComponent implements OnInit{
     this.isTitleChange = false;
   }
 
-  doTask(semesterId: number, subjectId: number, taskId: number, task: Task) {
+  doTask(semesterId: number, subjectId: number, taskId: number, index: number, task: Task) {
     this.taskService.doTask(semesterId, subjectId, taskId)
-      .subscribe(() => {
-        // task.done = !task.done;
+      .subscribe(task => {
+        task.deadlineDate = this.timeService.convertDeadlineToLocal(task);
+        if (task.done) {
+          this.tasks?.splice(index, 1);
+          this.doneTasks.push(task);
+        }
+        else {
+          this.doneTasks?.splice(index, 1);
+          this.tasks.push(task);
+        }
+        this.tasks.sort((task1, task2) => {
+          if (new Date(task1.deadlineDate) < new Date(task2.deadlineDate)) return -1;
+          return 1;
+        });
       });
   }
 
-  deleteTask(semesterId: number, subjectId: number, taskId: number, index: number) {
+  deleteTask(semesterId: number, subjectId: number, taskId: number, index: number, tasks: Task[]) {
     this.taskService.deleteTask(semesterId, subjectId, taskId)
       .subscribe(() => {
-        this.subject.tasks?.splice(index, 1);
+        tasks?.splice(index, 1);
       });
   }
 
@@ -81,11 +113,17 @@ export class TodoCardComponent implements OnInit{
 
   createTask(semesterId: number, subjectId: number) {
     try {
-      this.taskService.createTask(semesterId, subjectId, this.addTaskTitle.value, this.convertDeadlineDate(this.addTaskDeadline.value))
+      this.taskService.createTask(semesterId, subjectId, this.addTaskTitle.value,
+        this.timeService.convertDeadlineDateToISO(this.addTaskDeadline.value))
         .subscribe(task => {
-          this.subject.tasks?.push(task);
-          this.addTaskTitle.setValue('');
-          this.addTaskDeadline.setValue('');
+          task.deadlineDate = this.timeService.convertDeadlineToLocal(task);
+          this.tasks?.push(task);
+          this.tasks.sort((task1, task2) => {
+            if (new Date(task1.deadlineDate) < new Date(task2.deadlineDate)) return -1;
+            return 1;
+          });
+          // this.addTaskTitle.setValue('');
+          // this.addTaskDeadline.setValue('');
         });
     }
     catch (e: any) {
@@ -93,14 +131,6 @@ export class TodoCardComponent implements OnInit{
     }
   }
 
-  convertDeadlineDate(deadlineDate: string | null) {
-    let date = new Date();
-    if (deadlineDate != null) {
-      date = new Date(deadlineDate);
-    }
-    return date.toISOString().split('T')[0];
-  }
-
-  protected readonly focus = focus;
+  // protected readonly focus = focus;
   panelOpenState = false;
 }

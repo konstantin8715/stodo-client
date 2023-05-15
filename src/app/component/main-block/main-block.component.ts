@@ -65,7 +65,7 @@ export class MainBlockComponent implements OnInit {
   }
 
   createSubject(semesterId: number) {
-    this.subjectService.createSubject(semesterId, "Кликните два раза, чтобы редактировать название")
+    this.subjectService.createSubject(semesterId, "Новый предмет")
       .subscribe(s => {
         this.currentSemester.subjects?.push(s);
         // this.getSubjectsToSemester(this.semesters);

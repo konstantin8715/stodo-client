@@ -20,7 +20,7 @@
       </mat-expansion-panel-header>
 
       <div class="add-task-block">
-        <mat-form-field style="width: 100%;">
+        <mat-form-field class="mat-form-field-sm" style="width: 100%;">
           <mat-label>Введите название</mat-label>
           <input matInput placeholder="Лабораторная работа 1" [formControl]="addTaskTitle" required>
           <mat-error *ngIf="addTaskTitle.hasError('required')">
@@ -49,41 +49,76 @@
     </mat-expansion-panel>
   </mat-accordion>
 
-  <div class="task-list" *ngFor="let task of subject.tasks; let i = index">
+  <div class="task-list" *ngFor="let task of tasks; let i = index">
 
-    <div class="delete-task-button" (click)="deleteTask(semester.id, subject.id, task.id, i)">
+    <div class="delete-task-button" (click)="deleteTask(semester.id, subject.id, task.id, i, tasks)">
       <span>X</span>
     </div>
     <div class="task-list-item">
-      <span *ngIf="!task.done && !task.isChange" (click)="task.isChange = true" class="task-list-item-title">{{task.title}}</span>
-      <span *ngIf="task.done && !task.isChange" (click)="task.isChange = true"
-            style="text-decoration: line-through" class="task-list-item-title">{{task.title}}</span>
+      <span *ngIf="!task.isChange" (click)="task.isChange = true" class="task-list-item-title">{{task.title}}</span>
+<!--      <span *ngIf="task.done && !task.isChange" (click)="task.isChange = true"-->
+<!--            style="text-decoration: line-through" class="task-list-item-title">{{task.title}}</span>-->
 
-      <input *ngIf="task.done && task.isChange"
-             [value]="task.title" [(ngModel)]="task.title"
-             (focusout)="updateTask(semester.id, subject.id, task)"
-             (touchstart)="updateTask(semester.id, subject.id, task)"
-             style="text-decoration: line-through"
-             class="task-list-item-title"/>
-      <input *ngIf="!task.done && task.isChange" [value]="task.title" [(ngModel)]="task.title"
+<!--      <input *ngIf="task.done && task.isChange"-->
+<!--             [value]="task.title" [(ngModel)]="task.title"-->
+<!--             (focusout)="updateTask(semester.id, subject.id, task)"-->
+<!--             (touchstart)="updateTask(semester.id, subject.id, task)"-->
+<!--             style="text-decoration: line-through"-->
+<!--             class="task-list-item-title"/>-->
+      <input *ngIf="task.isChange" [value]="task.title" [(ngModel)]="task.title"
              (focusout)="updateTask(semester.id, subject.id, task)"
              (touchstart)="updateTask(semester.id, subject.id, task)"
              class="task-list-item-title"/>
 
       <span *ngIf="!task.done" class="task-list-item-deadline">{{task.deadlineDate | date}}</span>
-      <span *ngIf="task.done" style="text-decoration: line-through" class="task-list-item-deadline">
+<!--      <span *ngIf="task.done" style="text-decoration: line-through" class="task-list-item-deadline">-->
+<!--        {{task.deadlineDate | date}}-->
+<!--      </span>-->
+
+      <mat-checkbox [(ngModel)]="task.done" (click)="doTask(semester.id, subject.id, task.id, i, task)"></mat-checkbox>
+    </div>
+
+  </div>
+
+  <div class="task-list-divider">
+    <span>Сделано</span>
+  </div>
+
+  <div class="task-list" *ngFor="let task of doneTasks; let i = index">
+
+    <div class="delete-task-button" (click)="deleteTask(semester.id, subject.id, task.id, i, doneTasks)">
+      <span>X</span>
+    </div>
+    <div class="task-list-item">
+<!--      <span *ngIf="!task.done && !task.isChange" (click)="task.isChange = true" class="task-list-item-title">{{task.title}}</span>-->
+      <span *ngIf="!task.isChange" (click)="task.isChange = true"
+            style="text-decoration: line-through" class="task-list-item-title">{{task.title}}</span>
+
+      <input *ngIf="task.isChange"
+             [value]="task.title" [(ngModel)]="task.title"
+             (focusout)="updateTask(semester.id, subject.id, task)"
+             (touchstart)="updateTask(semester.id, subject.id, task)"
+             style="text-decoration: line-through"
+             class="task-list-item-title"/>
+<!--      <input *ngIf="!task.done && task.isChange" [value]="task.title" [(ngModel)]="task.title"-->
+<!--             (focusout)="updateTask(semester.id, subject.id, task)"-->
+<!--             (touchstart)="updateTask(semester.id, subject.id, task)"-->
+<!--             class="task-list-item-title"/>-->
+
+<!--      <span *ngIf="!task.done" class="task-list-item-deadline">{{task.deadlineDate | date}}</span>-->
+      <span style="text-decoration: line-through" class="task-list-item-deadline">
         {{task.deadlineDate | date}}
       </span>
 
-      <mat-checkbox [(ngModel)]="task.done" (click)="doTask(semester.id, subject.id, task.id, task)"></mat-checkbox>
-<!--      <button type="button" class="btn btn-warning task-list-item-todo-button"-->
-<!--              (click)="doTask(semester.id, subject.id, task.id, task)">-->
-<!--        <div style="display: block;">-->
-<!--          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">-->
-<!--            <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />-->
-<!--          </svg>-->
-<!--        </div>-->
-<!--      </button>-->
+      <mat-checkbox [(ngModel)]="task.done" (click)="doTask(semester.id, subject.id, task.id, i, task)"></mat-checkbox>
+      <!--      <button type="button" class="btn btn-warning task-list-item-todo-button"-->
+      <!--              (click)="doTask(semester.id, subject.id, task.id, task)">-->
+      <!--        <div style="display: block;">-->
+      <!--          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">-->
+      <!--            <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />-->
+      <!--          </svg>-->
+      <!--        </div>-->
+      <!--      </button>-->
     </div>
 
   </div>

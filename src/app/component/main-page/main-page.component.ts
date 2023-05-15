@@ -14,4 +14,5 @@ export class MainPageComponent {
     this.tokenStorageService.logOut();
   }
 
+  changeBlock = true;
 }

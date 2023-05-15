@@ -28,7 +28,7 @@ export class TaskService {
   }
 
   doTask(semesterId: number, subjectId: number, taskId: number) {
-    return this.http.patch(this.url + semesterId + '/' + subjectId + '/' + taskId, {}, /*{headers: headers}*/);
+    return this.http.patch<Task>(this.url + semesterId + '/' + subjectId + '/' + taskId, {}, /*{headers: headers}*/);
   }
 
   deleteTask(semesterId: number, subjectId: number, taskId: number) {

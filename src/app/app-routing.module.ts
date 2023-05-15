@@ -7,7 +7,7 @@ import {ResetPasswordComponent} from "./component/reset-password/reset-password.
 import {ForgotPasswordComponent} from "./component/forgot-password/forgot-password.component";
 import {MainPageComponent} from "./component/main-page/main-page.component";
 import {WelcomeComponent} from "./component/welcome/welcome.component";
-import {DeadlineBlockComponent} from "./component/deadline-block/deadline-block.component";
+import {DeadlinePageComponent} from "./component/deadline-block/deadline-page.component";
 
 const routes: Routes = [
   {path: '', component: WelcomeComponent},
@@ -16,7 +16,7 @@ const routes: Routes = [
   {path: 'main', component: MainPageComponent},
   {path: 'forgot', component: ForgotPasswordComponent},
   {path: 'reset', component: ResetPasswordComponent},
-  {path: 'deadline', component: DeadlineBlockComponent}
+  {path: 'deadline', component: DeadlinePageComponent}
 ];
 
 @NgModule({

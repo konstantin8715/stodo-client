@@ -18,7 +18,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { ResetPasswordComponent } from './component/reset-password/reset-password.component';
 import { ForgotPasswordComponent } from './component/forgot-password/forgot-password.component';
-import { DeadlineBlockComponent } from './component/deadline-block/deadline-block.component';
+import { DeadlinePageComponent } from './component/deadline-block/deadline-page.component';
 import { MainPageComponent } from './component/main-page/main-page.component';
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatListModule} from "@angular/material/list";
@@ -41,7 +41,7 @@ import {MatExpansionModule} from "@angular/material/expansion";
     RegistrationComponent,
     ResetPasswordComponent,
     ForgotPasswordComponent,
-    DeadlineBlockComponent,
+    DeadlinePageComponent,
     MainPageComponent,
     WelcomeComponent
   ],
