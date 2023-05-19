@@ -16,16 +16,16 @@ export class SemesterService {
     return this.http.get<Semester[]>(this.url, /*{headers: headers}*/);
   }
 
-  updateSemester(id: number, title: string): Observable<Object> {
+  updateSemester(id: number, title: string | null): Observable<Object> {
     const body = {title: title};
     return this.http.patch(this.url + '/' + id, body, /*{headers: headers}*/);
   }
 
   deleteSemester(semesterId: any) {
-    return this.http.delete(this.url + '/' + semesterId, /*{headers: headers}*/);
+    return this.http.delete<Semester>(this.url + '/' + semesterId, /*{headers: headers}*/);
   }
 
-  createSemester(title: string): Observable<Semester> {
+    createSemester(title: string | null): Observable<Semester> {
     const body = {title: title};
     return this.http.post<Semester>(this.url, body, /*{headers: headers}*/);
   }

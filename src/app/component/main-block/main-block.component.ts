@@ -5,6 +5,8 @@ import {SemesterService} from "../../service/semester.service";
 import {TokenStorageService} from "../../service/token-storage.service";
 import {Router} from "@angular/router";
 import {MatChipEditedEvent, MatChipInputEvent} from "@angular/material/chips";
+import {FormControl, Validators} from "@angular/forms";
+import {Subject} from "rxjs";
 
 @Component({
   selector: 'app-main-block',
@@ -12,6 +14,7 @@ import {MatChipEditedEvent, MatChipInputEvent} from "@angular/material/chips";
   styleUrls: ['./main-block.component.css']
 })
 export class MainBlockComponent implements OnInit {
+  semesterTitle = new FormControl('', [Validators.required]);
   semesters: Semester[] = [];
   currentSemester: Semester;
 
@@ -32,61 +35,94 @@ export class MainBlockComponent implements OnInit {
     this.semesterService.getAllSemesters()
       .subscribe(semesters => {
         this.semesters = semesters;
-        this.currentSemester = semesters[0];
+        // @ts-ignore
+        this.currentSemester = this.getCurrentSemester();
         this.getSubjectsToSemester(this.semesters);
       });
   }
 
-  updateSemester(semester: Semester, event: MatChipEditedEvent) {
-    const value = event.value.trim();
-    this.semesterService.updateSemester(semester.id, value).subscribe(() =>{
-      semester.title = value;
+  updateSemester(title: string | null) {
+    // const value = event.value.trim();
+    this.semesterService.updateSemester(this.currentSemester.id, title).subscribe(() =>{
+      if (title != null) {
+        this.currentSemester.title = title;
+      }
     });
   }
 
-  deleteSemester(id: number, index: number) {
-    this.semesterService.deleteSemester(id)
-      .subscribe(() => {
-        this.semesters.splice(index, 1);
+  deleteSemester() {
+    this.semesterService.deleteSemester(this.currentSemester.id)
+      .subscribe(s => {
+        // console.log('current semester id = ' + this.currentSemester.id);
+        // console.log(this.getCurrentSemesterIndex())
+        // console.log(this.semesters);
+        this.semesters.splice(this.getCurrentSemesterIndex  (), 1);
         this.currentSemester = this.semesters[0];
+        this.saveCurrentSemester(this.semesters[0]);
       });
   }
 
-  createSemester(event: MatChipInputEvent) {
-    const value = event.value.trim();
-
-    if (value) {
-      this.semesterService.createSemester(value)
-        .subscribe(s => {
-          this.semesters.push(s);
-          this.currentSemester = this.semesters[this.semesters.length - 1];
-        });
+  getCurrentSemesterIndex() {
+    for (let i = 0; i < this.semesters.length; i++) {
+      console.log(this.semesters[i].id);
+      if (this.semesters[i].id === this.currentSemester.id) return i;
     }
+    return 0;
+  }
+
+  createSemester() {
+    let semester;
+    this.semesterService.createSemester('Новый семестр')
+      .subscribe(s => {
+        this.semesters.push(s);
+        // this.currentSemester = this.semesters[this.semesters.length - 1];
+        // this.semesterTitle.setValue('');
+        this.saveCurrentSemester(s);
+        this.currentSemester = s;
+        semester = s;
+      });
+    return semester;
+    // const value = event.value.trim();
+    //
+    // if (value) {
+    //   this.semesterService.createSemester(value)
+    //     .subscribe(s => {
+    //       this.semesters.push(s);
+    //       this.currentSemester = this.semesters[this.semesters.length - 1];
+    //     });
+    // }
   }
 
   createSubject(semesterId: number) {
     this.subjectService.createSubject(semesterId, "Новый предмет")
       .subscribe(s => {
-        this.currentSemester.subjects?.push(s);
-        // this.getSubjectsToSemester(this.semesters);
+        // @ts-ignore
+        this.getCurrentSemester().subjects?.push(s);
+        this.getSubjectsToSemester(this.semesters);
       });
   }
 
   saveCurrentSemester(semester: Semester) {
-    this.currentSemester = semester;
     this.tokenStorageService.saveCurrentSemester(semester.id);
   }
 
   getCurrentSemester() {
     let id: number;
+    let semester;
     if (this.tokenStorageService.getCurrentSemester() != null) {
       id = Number(this.tokenStorageService.getCurrentSemester());
       this.semesters.forEach(s => {
-        if (s.id == id) this.currentSemester = s;
+        if (s.id == id)
+          semester = s;
       })
     }
-    return this.currentSemester;
+    else {
+      semester = this.createSemester();
+      // @ts-ignore
+      this.saveCurrentSemester(semester);
+    }
+    return semester;
   }
 
-  // protected readonly console = console;
+  protected readonly window = window;
 }

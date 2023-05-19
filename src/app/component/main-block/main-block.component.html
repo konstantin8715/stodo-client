@@ -1,47 +1,141 @@
-<div class="main-page-block">
+<mat-drawer-container style="background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(128,76,128,1) 0%);
+                      min-height: 800px"
+                      class="example-container">
 
-  <mat-card style="width: 100%; background: rgb(238,174,202);
-  background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(128,76,128,1) 0%); padding-top: 15px">
+  <mat-drawer #drawer class="example-sidenav" mode="over">
+    <mat-selection-list [multiple]="false">
+      <mat-list-option *ngFor="let semester of semesters"
+                       [value]="semester"
+                       [selected]="semester === currentSemester"
+                       (click)="currentSemester = semester; saveCurrentSemester(semester)">
+        {{semester.title}}
+      </mat-list-option>
+    </mat-selection-list>
+    <div style="display: flex; flex-direction: column; align-items: center; margin-top: 15px;">
+      <button style="width: 80%" mat-raised-button color="primary" class="delete-task-button"
+              data-bs-toggle="modal" data-bs-target="#createSemesterModal" (click)="createSemester()">
+        <span>Создать новый семестр</span>
+      </button>
+      <button *ngIf="semesters.length > 0" style="width: 80%; margin-top: 15px;"
+              mat-raised-button color="accent" class="delete-task-button"
+              data-bs-toggle="modal" data-bs-target="#changeSemesterModal">
+        <span>Изменить текущий семестр</span>
+      </button>
+      <button *ngIf="semesters.length > 0" style="width: 80%; margin-top: 15px;"
+              mat-raised-button color="warn" class="delete-task-button"
+              (click)="deleteSemester()">
+        <span>Удалить текущий семестр</span>
+      </button>
+    </div>
+  </mat-drawer>
 
-    <div class="semester-block">
+  <div class="content-container">
 
-      <mat-form-field class="semester-block-list example-chip-list" appearance="fill">
-        <mat-label>Разделы обучения</mat-label>
-        <mat-chip-grid #chipGrid aria-label="Введите семестр">
-          <mat-chip-row *ngFor="let semester of semesters; let index = index"
-                        (removed)="deleteSemester(semester.id, index)"
-                        [editable]="true"
-                        (edited)="updateSemester(semester, $event);"
-                        [aria-description]="'press enter to edit ' + semester.title"
-                        (click)="saveCurrentSemester(semester)">
-            {{semester.title}}
-            <button matChipRemove [attr.aria-label]="'remove ' + semester.title">
-              <mat-icon>cancel</mat-icon>
-            </button>
-          </mat-chip-row>
-          <input placeholder="Новый раздел..."
-                 [matChipInputFor]="chipGrid"
-                 [matChipInputAddOnBlur]="true"
-                 (matChipInputTokenEnd)="createSemester($event)"/>
-        </mat-chip-grid>
-      </mat-form-field>
+    <div class="example-sidenav-content" style="display: flex; flex-direction: column; align-items: flex-start">
 
-      <div *ngIf="semesters.length > 0 && currentSemester.subjects" class="semester-block-subject-list">
+      <div style="display:flex; justify-content: flex-end; width: 100%">
 
-        <app-todo-card *ngFor="let subject of currentSemester.subjects; let i = index"
-                       [semester]="getCurrentSemester()" [subject]="subject" [index]="i">
+        <button style="margin-top: 10px;" type="button" mat-raised-button color="primary" (click)="drawer.toggle()">
+          Разделы обучения
+        </button>
+
+      </div>
+
+
+      <div class="semester-block-subject-list" *ngIf="semesters.length > 0 && currentSemester != null">
+
+        <app-todo-card class="todo-card" *ngFor="let subject of currentSemester.subjects; let i = index"
+                       [semester]="currentSemester" [subject]="subject" [index]="i">
         </app-todo-card>
 
-        <div class="add-semester-button-area">
+        <div class="add-semester-button-area todo-card">
           <button (click)="createSubject(currentSemester.id)"
-                  mat-fab color="warn" aria-label="Example icon button with a home icon">
+                  mat-fab color="warn">
             <mat-icon>add</mat-icon>
           </button>
         </div>
 
       </div>
+
     </div>
 
-  </mat-card>
+  </div>
 
+</mat-drawer-container>
+
+
+<div class="modal fade" id="changeSemesterModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="changeSemesterModalLabel">Create semester</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <mat-form-field class="mat-form-field-sm" style="width: 100%;">
+          <mat-label>Введите название</mat-label>
+          <input matInput placeholder="Семестр" [formControl]="semesterTitle" required>
+          <mat-error *ngIf="semesterTitle.hasError('required')">
+            Название не может быть пустым
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+        <button type="button" class="btn btn-primary"
+                [disabled]="semesterTitle.invalid"
+                (click)="updateSemester(semesterTitle.value)" data-bs-dismiss="modal">Изменить семестр</button>
+      </div>
+    </div>
+  </div>
 </div>
+
+<!--<div class="main-page-block">-->
+
+<!--  <mat-card style="width: 100%; background: rgb(238,174,202);-->
+<!--  background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(128,76,128,1) 0%); padding-top: 15px">-->
+
+<!--    <div class="semester-block">-->
+
+<!--      <mat-form-field class="semester-block-list example-chip-list" appearance="fill">-->
+<!--        <mat-label>Разделы обучения</mat-label>-->
+<!--        <mat-chip-grid #chipGrid aria-label="Введите семестр">-->
+<!--          <mat-chip-row *ngFor="let semester of semesters; let index = index"-->
+<!--                        (removed)="deleteSemester(semester.id, index)"-->
+<!--                        [editable]="true"-->
+<!--                        (edited)="updateSemester(semester, $event);"-->
+<!--                        [aria-description]="'press enter to edit ' + semester.title"-->
+<!--                        (click)="saveCurrentSemester(semester)">-->
+<!--            {{semester.title}}-->
+<!--            <button matChipRemove [attr.aria-label]="'remove ' + semester.title">-->
+<!--              <mat-icon>cancel</mat-icon>-->
+<!--            </button>-->
+<!--          </mat-chip-row>-->
+<!--          <input placeholder="Новый раздел..."-->
+<!--                 [matChipInputFor]="chipGrid"-->
+<!--                 [matChipInputAddOnBlur]="true"-->
+<!--                 (matChipInputTokenEnd)="createSemester($event)"/>-->
+<!--        </mat-chip-grid>-->
+<!--      </mat-form-field>-->
+
+<!--      <div *ngIf="semesters.length > 0 && currentSemester.subjects" class="semester-block-subject-list">-->
+
+<!--        <app-todo-card *ngFor="let subject of currentSemester.subjects; let i = index"-->
+<!--                       [semester]="getCurrentSemester()" [subject]="subject" [index]="i">-->
+<!--        </app-todo-card>-->
+
+<!--        <div class="add-semester-button-area">-->
+<!--          <button (click)="createSubject(currentSemester.id)"-->
+<!--                  mat-fab color="warn" aria-label="Example icon button with a home icon">-->
+<!--            <mat-icon>add</mat-icon>-->
+<!--          </button>-->
+<!--        </div>-->
+
+<!--      </div>-->
+<!--    </div>-->
+
+<!--  </mat-card>-->
+
+<!--</div>-->

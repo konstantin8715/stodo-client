@@ -14,6 +14,52 @@ body {
   /*background: linear-gradient(45deg, rgb(20, 19, 22), rgb(176, 82, 182));*/
 }
 
+.page-container {
+  max-width: 1306px;
+  margin: auto;
+}
+
+@media (max-width: 1024px){
+  .page-container {
+    max-width: 960px;
+  }
+}
+
+@media (max-width: 972px){
+  .page-container {
+    max-width: 900px;
+  }
+}
+
+@media (max-width: 768px){
+  .page-container {
+    max-width: 700px;
+  }
+}
+
+.content-container {
+  max-width: 95%;
+  margin: auto;
+}
+
+/*@media (max-width: 1024px){*/
+/*  .page-container {*/
+/*    max-width: 960px;*/
+/*  }*/
+/*}*/
+
+/*@media (max-width: 972px){*/
+/*  .page-container {*/
+/*    max-width: 900px;*/
+/*  }*/
+/*}*/
+
+/*@media (max-width: 768px){*/
+/*  .page-container {*/
+/*    max-width: 700px;*/
+/*  }*/
+/*}*/
+
 .security-page {
   text-align: center;
   margin-top: 10rem;

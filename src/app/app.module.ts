@@ -30,6 +30,7 @@ import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatBadgeModule} from "@angular/material/badge";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatExpansionModule} from "@angular/material/expansion";
+import {MatSidenavModule} from "@angular/material/sidenav";
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import {MatExpansionModule} from "@angular/material/expansion";
     MatToolbarModule,
     MatBadgeModule,
     MatCheckboxModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatSidenavModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
