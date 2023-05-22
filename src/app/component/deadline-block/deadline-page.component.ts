@@ -71,20 +71,4 @@ export class DeadlinePageComponent implements OnInit {
   logOut() {
     this.tokenStorageService.logOut();
   }
-
-  // sortLists() {
-  //   console.log("fojsdl")
-  //
-  //   console.log(this.currentTasks);
-  //
-  //   this.currentTasks.sort((task1, task2) => {
-  //     if (new Date(task1.deadlineDate) < new Date(task2.deadlineDate)) return -1;
-  //     return 1;
-  //   });
-  //
-  //   this.overDueTasks.sort((task1, task2) => {
-  //     if (new Date(task1.deadlineDate) < new Date(task2.deadlineDate)) return -1;
-  //     return 1;
-  //   });
-  // }
 }

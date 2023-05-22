@@ -14,7 +14,7 @@
     <mat-expansion-panel style="background-color: #6c757d" (opened)="panelOpenState = true"
                          (closed)="panelOpenState = false">
       <mat-expansion-panel-header style="background-color: #6c757d">
-        <mat-panel-title>
+        <mat-panel-title style="color: white">
           Добавить задание
         </mat-panel-title>
       </mat-expansion-panel-header>
@@ -39,7 +39,7 @@
           </mat-error>
         </mat-form-field>
 
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+        <button type="button" class="btn" style="background: #1B13A3; color: white" data-bs-dismiss="modal"
                 [disabled]="addTaskTitle.invalid || addTaskDeadline.invalid"
                 (click)="createTask(semester.id, subject.id)">
           Добавить задание

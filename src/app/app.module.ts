@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {LOCALE_ID, NgModule} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
@@ -31,6 +31,10 @@ import {MatBadgeModule} from "@angular/material/badge";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatExpansionModule} from "@angular/material/expansion";
 import {MatSidenavModule} from "@angular/material/sidenav";
+import {registerLocaleData} from "@angular/common";
+import localeRu from '@angular/common/locales/ru';
+
+registerLocaleData(localeRu, 'ru');
 
 @NgModule({
   declarations: [
@@ -75,7 +79,7 @@ import {MatSidenavModule} from "@angular/material/sidenav";
     provide: HTTP_INTERCEPTORS,
     useClass: AuthInterceptorService,
     multi: true,
-  }],
+  }, { provide: LOCALE_ID, useValue: 'ru' }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

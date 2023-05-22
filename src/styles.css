@@ -7,11 +7,22 @@ body {
   margin: 0;
   font-family: Roboto,
   "Helvetica Neue", sans-serif;
-  background: rgb(238,174,202);
-  background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(181,181,181,1) 95%);
-  /*background: -webkit-linear-gradient(45deg, rgb(20, 19, 22), rgb(176, 82, 182));*/
-  /*background: -moz-linear-gradient(45deg, rgb(20, 19, 22), rgb(176, 82, 182));*/
-  /*background: linear-gradient(45deg, rgb(20, 19, 22), rgb(176, 82, 182));*/
+  background: white;
+}
+
+/*Тулбар*/
+.mat-toolbar {
+  background: #e91e63;
+}
+
+/*Большой блок снизу*/
+.mat-drawer-container {
+  background: #804c80;
+}
+
+/*Карточка*/
+.subject-card {
+  background: #f7e4f7;
 }
 
 .page-container {

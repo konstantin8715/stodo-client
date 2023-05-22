@@ -4,7 +4,7 @@
 
     <div class="content-container" style="display: flex; justify-content: space-between; width: 100%;">
 
-      <span>STODO APP</span>
+      <span style="color: white;">STODO APP</span>
       <div>
         <button routerLink="/main" mat-raised-button class="toolbar_button" color="warn" style="margin-right: 10px;">
           Главная
@@ -20,45 +20,66 @@
 
     <div class="content-container" style="width: 100%">
 
-      <span>Ближайшие делайны</span>
-      <div style="overflow-y: auto; height: 350px">
-        <table class="table table-light" >
-          <thead class="thead-dark">
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Задание</th>
-            <th scope="col">Дата дедлайна</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let task of currentTasks; let i = index">
-            <th scope="row">{{i+1}}</th>
-            <td>{{task.title}}</td>
-            <td>{{task.deadlineDate | date}}</td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
+      <mat-accordion>
+        <mat-expansion-panel expanded="true" style="background: #f7e4f7">
+          <mat-expansion-panel-header>
+            <mat-panel-title style="font-size: 16px;">
+              Ближайшие дедлайны
+            </mat-panel-title>
+          </mat-expansion-panel-header>
 
-      <span>Просроченные дедлайны</span>
-      <div style="overflow-y: auto; height: 350px">
-        <table class="table table-light" >
-          <thead class="thead-light">
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Задание</th>
-            <th scope="col">Дата дедлайна</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let task of overDueTasks; let i = index">
-            <th scope="row">{{i+1}}</th>
-            <td>{{task.title}}</td>
-            <td>{{task.deadlineDate | date}}</td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
+          <div>
+            <table class="table" style="background: #f7e4f7">
+              <thead class="thead-dark">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Задание</th>
+                <th scope="col">Дата дедлайна</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let task of currentTasks; let i = index">
+                <th scope="row">{{i+1}}</th>
+                <td>{{task.title}}</td>
+                <td>{{task.deadlineDate | date}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </mat-expansion-panel>
+      </mat-accordion>
+
+      <mat-accordion>
+        <mat-expansion-panel style="margin-top: 20px; background: #f7e4f7; margin-bottom: 20px;">
+          <mat-expansion-panel-header>
+            <mat-panel-title style="font-size: 16px;">
+              Просроченные дедлайны
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <div>
+            <table class="table" style="background: #f7e4f7">
+              <thead class="thead-light">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Задание</th>
+                <th scope="col">Дата дедлайна</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let task of overDueTasks; let i = index">
+                <th scope="row">{{i+1}}</th>
+                <td>{{task.title}}</td>
+                <td>{{task.deadlineDate | date}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </mat-expansion-panel>
+      </mat-accordion>
+
 
     </div>
 
