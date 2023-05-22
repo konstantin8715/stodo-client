@@ -15,12 +15,7 @@
   padding-top: 15px
 }
 
-table {
-  width: 90%;
-}
-
-@media (max-width: 590px){
-  table {
-    font-size: 14px;
-  }
+.deadline-page-content span {
+  color: white;
+  font-size: 18px;
 }

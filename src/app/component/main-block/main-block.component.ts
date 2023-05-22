@@ -7,6 +7,7 @@ import {Router} from "@angular/router";
 import {MatChipEditedEvent, MatChipInputEvent} from "@angular/material/chips";
 import {FormControl, Validators} from "@angular/forms";
 import {Subject} from "rxjs";
+import {ShareService} from "../../service/share.service";
 
 @Component({
   selector: 'app-main-block',
@@ -21,7 +22,45 @@ export class MainBlockComponent implements OnInit {
   constructor(public subjectService: SubjectService,
               public semesterService: SemesterService,
               public tokenStorageService: TokenStorageService,
+              public shareService: ShareService,
               public router: Router) {
+  }
+
+  uploadSemester() {
+    let fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.addEventListener('change', event => {
+      const target = event.target as HTMLInputElement;
+      // @ts-ignore
+      const selectedFile = target.files[0];
+      const uploadData = new FormData();
+      uploadData.append('file', selectedFile, selectedFile.name);
+      this.shareService.upload(uploadData).subscribe(() => {
+        this.semesterService.getAllSemesters()
+          .subscribe(semesters => {
+            this.semesters = semesters;
+            // @ts-ignore
+            this.currentSemester = this.getCurrentSemester();
+            this.getSubjectsToSemester(this.semesters);
+          });
+      });
+      // @ts-ignore
+      fileInput = null;
+    });
+    fileInput.click();
+  }
+
+  dumpSemester(semesterId: number) {
+    this.shareService.dump(semesterId).subscribe(response => {
+      let fileName = this.currentSemester.title + ' ' +
+        new Date(this.currentSemester.createdAt).toDateString();
+      let blob: Blob = response.body as Blob;
+      let a = document.createElement('a');
+      // @ts-ignore
+      a.download = fileName;
+      a.href = window.URL.createObjectURL(blob);
+      a.click();
+    });
   }
 
   getSubjectsToSemester(semesters: Semester[]) {

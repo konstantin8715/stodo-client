@@ -18,46 +18,49 @@
 
   <mat-card class="deadline-page-content">
 
+    <div class="content-container" style="width: 100%">
 
-    <table class="table table-light" style="overflow-y: auto; height: 350px">
-      <thead class="thead-dark">
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Задание</th>
-        <th scope="col">Дата дедлайна</th>
-<!--        <th scope="col"></th>-->
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let task of currentTasks; let i = index">
-        <th scope="row">{{i+1}}</th>
-        <td>{{task.title}}</td>
-        <td>{{task.deadlineDate | date}}</td>
-<!--        <td><mat-checkbox></mat-checkbox></td>-->
-      </tr>
-      </tbody>
-    </table>
+      <span>Ближайшие делайны</span>
+      <div style="overflow-y: auto; height: 350px">
+        <table class="table table-light" >
+          <thead class="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Задание</th>
+            <th scope="col">Дата дедлайна</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let task of currentTasks; let i = index">
+            <th scope="row">{{i+1}}</th>
+            <td>{{task.title}}</td>
+            <td>{{task.deadlineDate | date}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
 
+      <span>Просроченные дедлайны</span>
+      <div style="overflow-y: auto; height: 350px">
+        <table class="table table-light" >
+          <thead class="thead-light">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Задание</th>
+            <th scope="col">Дата дедлайна</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let task of overDueTasks; let i = index">
+            <th scope="row">{{i+1}}</th>
+            <td>{{task.title}}</td>
+            <td>{{task.deadlineDate | date}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
 
-    <table class="table table-light">
-      <thead class="thead-light">
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Задание</th>
-        <th scope="col">Дата дедлайна</th>
-<!--        <th scope="col"></th>-->
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let task of overDueTasks; let i = index">
-        <th scope="row">{{i+1}}</th>
-        <td>{{task.title}}</td>
-        <td>{{task.deadlineDate | date}}</td>
-<!--        <td><mat-checkbox></mat-checkbox></td>-->
-      </tr>
-      </tbody>
-    </table>
-
+    </div>
 
   </mat-card>
 

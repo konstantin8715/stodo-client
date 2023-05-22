@@ -7,6 +7,30 @@
   align-items: center;
 }
 
+@media (max-width: 425px){
+  .mat-mdc-list-base {
+    --mdc-list-list-item-label-text-size: 14px;
+  }
+}
+
+@media (max-width: 395px){
+  .mat-mdc-list-base {
+    --mdc-list-list-item-label-text-size: 12px;
+  }
+}
+
+@media (max-width: 363px){
+  .mat-mdc-list-base {
+    --mdc-list-list-item-label-text-size: 10px;
+  }
+}
+
+@media (max-width: 363px){
+  .mat-mdc-list-base {
+    --mdc-list-list-item-label-text-size: 8px;
+  }
+}
+
 .semester-block {
   display: flex;
   flex-direction: column;
@@ -18,6 +42,35 @@
   width: 95%;
   align-items: center;
   justify-content: center;
+}
+
+.semester-button-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.semester-button-group button {
+  width: 80%;
+}
+
+@media (max-width: 425px){
+  .semester-button-group button {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 385px){
+  .semester-button-group button {
+    width: 90%;
+  }
+}
+
+@media (max-width: 328px){
+  .semester-button-group button {
+    width: 97%;
+  }
 }
 
 .semester-block-subject-list {

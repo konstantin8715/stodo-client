@@ -11,17 +11,17 @@
         {{semester.title}}
       </mat-list-option>
     </mat-selection-list>
-    <div style="display: flex; flex-direction: column; align-items: center; margin-top: 15px;">
-      <button style="width: 80%" mat-raised-button color="primary" class="delete-task-button"
+    <div class="semester-button-group">
+      <button mat-raised-button color="primary" class="delete-task-button"
               data-bs-toggle="modal" data-bs-target="#createSemesterModal" (click)="createSemester()">
         <span>Создать новый семестр</span>
       </button>
-      <button *ngIf="semesters.length > 0" style="width: 80%; margin-top: 15px;"
+      <button *ngIf="semesters.length > 0" style="margin-top: 15px;"
               mat-raised-button color="accent" class="delete-task-button"
               data-bs-toggle="modal" data-bs-target="#changeSemesterModal">
         <span>Изменить текущий семестр</span>
       </button>
-      <button *ngIf="semesters.length > 0" style="width: 80%; margin-top: 15px;"
+      <button *ngIf="semesters.length > 0" style="margin-top: 15px;"
               mat-raised-button color="warn" class="delete-task-button"
               (click)="deleteSemester()">
         <span>Удалить текущий семестр</span>
@@ -35,8 +35,18 @@
 
       <div style="display:flex; justify-content: flex-end; width: 100%">
 
-        <button style="margin-top: 10px;" type="button" mat-raised-button color="primary" (click)="drawer.toggle()">
+        <button style="margin-top: 10px; margin-right: 5px;" type="button" mat-raised-button color="primary" (click)="drawer.toggle()">
           Разделы обучения
+        </button>
+
+        <button style="margin-top: 10px; margin-right: 5px" type="button" mat-raised-button color="accent"
+                (click)="dumpSemester(currentSemester.id)">
+          Скачать раздел
+        </button>
+
+        <button style="margin-top: 10px;" type="button" mat-raised-button color="warn"
+                (click)="uploadSemester()">
+          Загрузить раздел
         </button>
 
       </div>
